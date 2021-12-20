@@ -6,8 +6,8 @@ import { ShopsModule } from './shops/shops.module';
 import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { validate } from './env.validation';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 import defaultConfig from './config/default.config';
 
 @Module({
@@ -20,6 +20,7 @@ import defaultConfig from './config/default.config';
     UsersModule,
     ShopsModule,
     ProductsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

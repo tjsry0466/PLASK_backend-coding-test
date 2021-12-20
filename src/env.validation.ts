@@ -13,21 +13,6 @@ class EnvironmentVariables {
 
   @IsNumber()
   PORT: number;
-
-  @IsString()
-  DATABASE_HOST: string;
-
-  @IsString()
-  DATABASE_USER: string;
-
-  @IsString()
-  DATABASE_PASSWORD: string;
-
-  @IsNumber()
-  DATABASE_PORT: number;
-
-  @IsString()
-  DATABASE_DATABASE: string;
 }
 
 export function validate(config: Record<string, unknown>) {

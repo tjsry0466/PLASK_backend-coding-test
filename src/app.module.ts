@@ -8,7 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validate } from './env.validation';
-import databaseConfig from './config/database.config';
 import defaultConfig from './config/default.config';
 
 @Module({

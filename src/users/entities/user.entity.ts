@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { IsEmail, IsNumber, IsString } from 'class-validator';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -13,6 +14,7 @@ export class User {
 
   @Column()
   @IsString()
+  @Exclude()
   password: string;
 
   @Column()
@@ -22,4 +24,8 @@ export class User {
   @Column()
   @IsString()
   phone: string;
+
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
 }

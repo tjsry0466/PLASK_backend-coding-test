@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +18,13 @@ export class UsersService {
   }
 
   async register(createUserDto: CreateUserDto): Promise<User> {
+    if (await this.findOne(createUserDto.email)) {
+      throw new HttpException(
+        'email number already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const user = new User(createUserDto);
     return await this.usersRepository.save(user);
   }

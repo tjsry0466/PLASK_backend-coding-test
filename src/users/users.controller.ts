@@ -5,12 +5,13 @@ import {
   Param,
   Delete,
   UseInterceptors,
-  ClassSerializerInterceptor,
+  ClassSerializerInterceptor, UseGuards
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('/')
 export class UsersController {
@@ -27,7 +28,8 @@ export class UsersController {
     return this.usersService.login(loginUserDto);
   }
 
-  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @Delete('/users/:id')
   withdrawal(@Param('id') id: string) {
     return this.usersService.withdrawal(id);
   }

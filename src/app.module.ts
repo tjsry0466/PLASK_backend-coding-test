@@ -8,14 +8,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import defaultConfig from './config/default.config';
+import appConfig from './config/app.config';
+import { MinioModule } from 'nestjs-minio-client';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [defaultConfig],
+      load: [appConfig],
     }),
+    MinioModule,
     TypeOrmModule.forRoot(),
     UsersModule,
     ShopsModule,

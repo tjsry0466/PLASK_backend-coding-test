@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class MinioClientService {
   private readonly logger: Logger;
-  private readonly baseBucket = this.configService.get('bucket');
+  private readonly baseBucket = this.configService.get('minio.bucket');
 
   public get client() {
     return this.minio.client;
@@ -24,6 +24,7 @@ export class MinioClientService {
     file: BufferedFile,
     baseBucket: string = this.baseBucket,
   ) {
+
     if (!(file.mimetype.includes('jpeg') || file.mimetype.includes('png'))) {
       throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST)
     }
@@ -39,16 +40,19 @@ export class MinioClientService {
     const metaData = {
       'Content-Type': file.mimetype,
       'X-Amz-Meta-Testing': 1234,
+      acl: 'public-read',
     };
     const filename = hashedFileName + ext;
     const fileName = `${filename}`;
     const fileBuffer = file.buffer;
+    console.log(baseBucket, fileName, fileBuffer, metaData);
     this.client.putObject(
       baseBucket,
       fileName,
       fileBuffer,
       metaData,
       function (err, res) {
+        console.log(err, res);
         if (err)
           throw new HttpException(
             'Error uploading file',
@@ -58,9 +62,11 @@ export class MinioClientService {
     );
 
     return {
-      url: `${this.configService.get('endpoint')}:${this.configService.get(
-        'port',
-      )}/${this.configService.get('bucket')}/${filename}`,
+      url: `${this.configService.get(
+        'minio.endpoint',
+      )}:${this.configService.get('minio.port')}/${this.configService.get(
+        'minio.bucket',
+      )}/${filename}`,
     };
   }
 

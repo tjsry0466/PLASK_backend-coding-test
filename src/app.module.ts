@@ -10,12 +10,13 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import appConfig from './config/app.config';
 import { MinioModule } from 'nestjs-minio-client';
+import minioConfig from './config/minio.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig],
+      load: [appConfig, minioConfig],
     }),
     MinioModule,
     TypeOrmModule.forRoot(),

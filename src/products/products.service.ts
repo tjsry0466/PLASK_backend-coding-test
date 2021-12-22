@@ -3,17 +3,25 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
+import { MinioClientService } from '../minio-client/minio-client.service';
+import { BufferedFile } from '../minio-client/file.model';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    private minioClientService: MinioClientService,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, image: BufferedFile) {
     // TODO 이름, 설명, 이미지, 원가, 할인가
+
+    const uploaded_image = await this.minioClientService.upload(image);
+
     const product = new Product(createProductDto);
+    product.image = uploaded_image.url;
+
     return this.productRepository.save(product);
   }
 

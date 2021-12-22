@@ -13,8 +13,6 @@ export class CreateProductDto {
   readonly description: string;
 
   @ApiProperty({ type: 'file' })
-  @IsString()
-  @IsNotEmpty()
   readonly image: string;
 
   @ApiProperty()

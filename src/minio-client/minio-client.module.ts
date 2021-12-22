@@ -8,11 +8,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MinioModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        endPoint: configService.get('MINIO_ENDPOINT'),
-        port: parseInt(configService.get('MINIO_PORT')),
+        endPoint: configService.get('minio.endpoint'),
+        port: parseInt(configService.get('minio.port')),
         useSSL: false, // If on localhost, keep it at false. If deployed on https, change to true
-        accessKey: configService.get('MINIO_ACCESS_KEY'),
-        secretKey: configService.get('MINIO_SECRET_KEY'),
+        accessKey: configService.get('minio.access_key'),
+        secretKey: configService.get('minio.secret_key'),
       }),
       inject: [ConfigService],
     }),

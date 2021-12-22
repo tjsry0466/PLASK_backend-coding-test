@@ -1,21 +1,25 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
-import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly shopsService: ShopsService) {}
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createShopDto: CreateShopDto) {
     return this.shopsService.create(createShopDto);
   }
 
   @Get()
-  findAll() {
-    return this.shopsService.findAll();
+  findAll(
+    @Query('name') name: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
+  ) {
+    return this.shopsService.findAll({ skip, take, name });
   }
 
   @Get(':id')

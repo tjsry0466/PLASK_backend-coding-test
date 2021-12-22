@@ -1,22 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) {}
+
+  async create(createProductDto: CreateProductDto) {
     // TODO 이름, 설명, 이미지, 원가, 할인가
-    return 'This action adds a new product';
+    const product = new Product(createProductDto);
+    return this.productRepository.save(product);
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll() {
+    return this.productRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    return this.productRepository.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    return this.productRepository.delete(id);
   }
 }

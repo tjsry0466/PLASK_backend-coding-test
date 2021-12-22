@@ -1,6 +1,8 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNumber, IsString } from 'class-validator';
+import { CreateProductDto } from '../dto/create-product.dto';
 
+@Entity()
 export class Product {
   @PrimaryGeneratedColumn()
   @IsNumber()
@@ -29,4 +31,8 @@ export class Product {
   @Column()
   @IsNumber()
   discount_price: number;
+
+  constructor(partial: CreateProductDto) {
+    Object.assign(this, partial);
+  }
 }

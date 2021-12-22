@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/co
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { number, string } from 'joi';
 
 @Controller('shops')
 export class ShopsController {
@@ -19,7 +20,11 @@ export class ShopsController {
     @Query('skip') skip: number,
     @Query('take') take: number,
   ) {
-    return this.shopsService.findAll({ skip, take, name });
+    return this.shopsService.findAll({
+      skip: number,
+      take: number,
+      name: string,
+    });
   }
 
   @Get(':id')

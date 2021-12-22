@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -15,10 +15,14 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
+  findAll(
+    @Query('orderBy') orderBy: string,
+    @Query('skip') skip: number,
+    @Query('take') take: number,
+  ) {
     // TODO 낮은 가격, 높은 가격, 평점, 최신순
-    // 페이지네이션 기본 10개, 요청에 따라 20~40개 까지 가능
-    return this.productsService.findAll();
+    // TODO 페이지네이션 기본 10개, 요청에 따라 20~40개 까지 가능
+    return this.productsService.findAll({ orderBy, skip, take });
   }
 
   @Get(':id')

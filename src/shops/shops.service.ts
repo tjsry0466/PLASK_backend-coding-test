@@ -16,7 +16,7 @@ export class ShopsService {
     return this.shopsRepository.save(shop);
   }
 
-  async findAll({ skip, take, name }) {
+  async findAll({ name, skip, take }) {
     // TODO id, 이름, 쇼핑몰 로고
     // TODO 페이지네이션 이름순
     const result = this.shopsRepository.createQueryBuilder('shop');

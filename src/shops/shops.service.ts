@@ -3,16 +3,23 @@ import { CreateShopDto } from './dto/create-shop.dto';
 import { Shop } from './entities/shop.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { BufferedFile } from '../minio-client/file.model';
+import { Product } from '../products/entities/product.entity';
+import { MinioClientService } from '../minio-client/minio-client.service';
 
 @Injectable()
 export class ShopsService {
   constructor(
     @InjectRepository(Shop)
     private readonly shopsRepository: Repository<Shop>,
+    private minioClientService: MinioClientService,
   ) {}
 
-  async create(createShopDto: CreateShopDto) {
+  async create(createShopDto: CreateShopDto, image: BufferedFile) {
+    const uploaded_image = await this.minioClientService.upload(image);
     const shop = new Shop(createShopDto);
+    shop.logo = uploaded_image.url;
+
     return this.shopsRepository.save(shop);
   }
 

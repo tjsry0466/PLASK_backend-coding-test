@@ -13,6 +13,5 @@ export class CreateShopDto {
   readonly name: string;
 
   @ApiProperty({ type: 'file' })
-  @IsNotEmpty()
   readonly logo: string;
 }

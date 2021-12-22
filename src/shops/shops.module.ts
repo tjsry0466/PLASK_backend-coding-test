@@ -4,9 +4,10 @@ import { ShopsController } from './shops.controller';
 import { UsersModule } from '../users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Shop } from './entities/shop.entity';
+import { MinioClientModule } from '../minio-client/minio-client.module';
 
 @Module({
-  imports: [UsersModule, TypeOrmModule.forFeature([Shop])],
+  imports: [MinioClientModule, UsersModule, TypeOrmModule.forFeature([Shop])],
   controllers: [ShopsController],
   providers: [ShopsService],
 })

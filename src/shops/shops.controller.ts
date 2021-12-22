@@ -1,17 +1,23 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { number, string } from 'joi';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { BufferedFile } from '../minio-client/file.model';
 
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly shopsService: ShopsService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createShopDto: CreateShopDto) {
-    return this.shopsService.create(createShopDto);
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('logo'))
+  create(
+    @UploadedFile() image: BufferedFile,
+    @Body() createShopDto: CreateShopDto,
+  ) {
+    return this.shopsService.create(createShopDto, image);
   }
 
   @Get()

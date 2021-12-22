@@ -4,6 +4,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { hash } from '../utils/bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -25,6 +26,7 @@ export class UsersService {
     }
 
     const user = new User(createUserDto);
+    user.password = await hash(user.password);
     return await this.usersRepository.save(user);
   }
 

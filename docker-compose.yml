@@ -13,7 +13,30 @@ services:
     command: server /data --console-address ":9001"
     volumes:
       - storage:/data
+  db:
+    platform: linux/x86_64 # M1 맥에서 발생하는 에러 대응
+    image: mysql:latest
+    restart: always
+    container_name: mysql-docker # 컨테이너 이름 설정
+    ports:
+      - 3307:3307 # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)  <- 컨테이너 내부는 무조건 3306
+    environment: # -e 옵션
+      - MYSQL_DATABASE=plask
+      - MYSQL_DATABASE=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_TCP_PORT=3307
+      - TZ=Asia/Seoul
+    command: # 명령어 실행
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+#      - /Users/Shared/data/mysql-docker:/var/lib/mysql # -v 옵션 (다렉토리 마운트 설정)
 
 volumes:
   storage:
     name: s3
+    external: true
+
+

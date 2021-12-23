@@ -50,7 +50,7 @@ plask의 백엔드 코딩 테스트 입니다.
 cd ~
 git clone https://github.com/tjsry0466/PLASK_backend-coding-test.git
 cd PLASK_backend-coding-test
-cp .env.example .env
+cp ..env.example .env
 cp .ormconfig.json.example .ormconfig.json
 docker-compose -f docker-compose.yml up 
 
